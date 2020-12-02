@@ -282,6 +282,15 @@ export class ResourceTreeAdapter implements ReactAdapter {
       contextMenu: ResourceTreeContextMenuButtonFactory.createCollectionContextMenuButton(this.container, collection),
     });
 
+    if (this.container.isPreferredApiMongoDB()) {
+      children.push({
+        label: "Schema",
+        onClick: collection.onMongoDBSchemaClick.bind(collection),
+        isSelected: () =>
+          this.isDataNodeSelected(collection.databaseId, collection.id(), [ViewModels.CollectionTabKind.MongoSchema]),
+      });
+    }
+
     if (!this.container.isPreferredApiCassandra() || !this.container.isServerlessEnabled()) {
       children.push({
         label: database.isDatabaseShared() || this.container.isServerlessEnabled() ? "Settings" : "Scale & Settings",

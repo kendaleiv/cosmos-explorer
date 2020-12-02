@@ -22,6 +22,7 @@ import ConflictsTab from "../Tabs/ConflictsTab";
 import DocumentsTab from "../Tabs/DocumentsTab";
 import GraphTab from "../Tabs/GraphTab";
 import MongoDocumentsTab from "../Tabs/MongoDocumentsTab";
+import MongoSchemaTab from "../Tabs/MongoSchemaTab";
 import MongoQueryTab from "../Tabs/MongoQueryTab";
 import MongoShellTab from "../Tabs/MongoShellTab";
 import QueryTab from "../Tabs/QueryTab";
@@ -528,6 +529,55 @@ export default class Collection implements ViewModels.Collection {
         onUpdateTabsButtons: this.container.onUpdateTabsButtons,
       });
       this.container.tabsManager.activateNewTab(mongoDocumentsTab);
+    }
+  };
+
+  public onMongoDBSchemaClick = () => {
+    this.container.selectedNode(this);
+    this.selectedSubnodeKind(ViewModels.CollectionTabKind.MongoSchema);
+    TelemetryProcessor.trace(Action.SelectItem, ActionModifiers.Mark, {
+      description: "Mongo Schema node",
+      databaseAccountName: this.container.databaseAccount().name,
+      databaseName: this.databaseId,
+      collectionName: this.id(),
+      defaultExperience: this.container.defaultExperience(),
+      dataExplorerArea: Constants.Areas.ResourceTree,
+    });
+
+    const mongoSchemaTabs: MongoSchemaTab[] = this.container.tabsManager.getTabs(
+      ViewModels.CollectionTabKind.MongoSchema,
+      (tab) => tab.collection && tab.collection.databaseId === this.databaseId && tab.collection.id() === this.id()
+    ) as MongoSchemaTab[];
+    let mongoSchemaTab: MongoSchemaTab = mongoSchemaTabs && mongoSchemaTabs[0];
+
+    if (mongoSchemaTab) {
+      this.container.tabsManager.activateTab(mongoSchemaTab);
+    } else {
+      const startKey: number = TelemetryProcessor.traceStart(Action.Tab, {
+        databaseAccountName: this.container.databaseAccount().name,
+        databaseName: this.databaseId,
+        collectionName: this.id(),
+        defaultExperience: this.container.defaultExperience(),
+        dataExplorerArea: Constants.Areas.Tab,
+        tabTitle: "Mongo Schema",
+      });
+      this.documentIds([]);
+
+      mongoSchemaTab = new MongoSchemaTab({
+        container: this.container,
+        tabKind: ViewModels.CollectionTabKind.MongoSchema,
+        title: "Mongo Schema",
+        tabPath: "",
+
+        collection: this,
+
+        node: this,
+        hashLocation: `${Constants.HashRoutePrefixes.collectionsWithIds(this.databaseId, this.id())}/mongoSchema`,
+        isActive: ko.observable(false),
+        onLoadStartKey: startKey,
+        onUpdateTabsButtons: this.container.onUpdateTabsButtons,
+      });
+      this.container.tabsManager.activateNewTab(mongoSchemaTab);
     }
   };
 

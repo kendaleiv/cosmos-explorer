@@ -28,6 +28,7 @@ ko.components.register("tabs-manager", TabsManagerKOComponent());
 // Collection Tabs
 ko.components.register("documents-tab", new TabComponents.DocumentsTab());
 ko.components.register("mongo-documents-tab", new TabComponents.MongoDocumentsTab());
+ko.components.register("mongo-schema-tab", new TabComponents.MongoSchemaTab());
 ko.components.register("stored-procedure-tab", new TabComponents.StoredProcedureTab());
 ko.components.register("trigger-tab", new TabComponents.TriggerTab());
 ko.components.register("user-defined-function-tab", new TabComponents.UserDefinedFunctionTab());

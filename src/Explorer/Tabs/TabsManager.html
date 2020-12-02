@@ -145,6 +145,10 @@
       <!-- ko if: $data.tabKind === 20 -->
       <settings-tab-v2 params="{data: $data}"></settings-tab-v2>
       <!-- /ko -->
+
+      <!-- ko if: $data.tabKind === 21 -->
+      <mongo-schema-tab params="{data: $data}"></mongo-schema-tab>
+      <!-- /ko -->
     </div>
     <!-- /ko -->
   </div>

@@ -5,6 +5,7 @@ import SparkMasterTabTemplate from "./SparkMasterTab.html";
 import NotebookV2TabTemplate from "./NotebookV2Tab.html";
 import TerminalTabTemplate from "./TerminalTab.html";
 import MongoDocumentsTabTemplate from "./MongoDocumentsTab.html";
+import MongoSchemaTabTemplate from "./MongoSchemaTab.html";
 import MongoQueryTabTemplate from "./MongoQueryTab.html";
 import MongoShellTabTemplate from "./MongoShellTab.html";
 import QueryTabTemplate from "./QueryTab.html";
@@ -101,6 +102,15 @@ export class MongoQueryTab {
     return {
       viewModel: TabComponent,
       template: MongoQueryTabTemplate,
+    };
+  }
+}
+
+export class MongoSchemaTab {
+  constructor() {
+    return {
+      viewModel: TabComponent,
+      template: MongoSchemaTabTemplate,
     };
   }
 }
