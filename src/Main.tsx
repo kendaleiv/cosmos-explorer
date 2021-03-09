@@ -69,6 +69,7 @@ import { NotificationConsoleComponent } from "./Explorer/Menus/NotificationConso
 import { PanelContainerComponent } from "./Explorer/Panes/PanelContainerComponent";
 import { SplashScreen } from "./Explorer/SplashScreen/SplashScreen";
 import { Dialog, DialogProps } from "./Explorer/Controls/Dialog";
+import { Tabs } from "./Explorer/Tabs/Tabs";
 import { useTabs } from "./hooks/useTabs";
 
 initializeIcons();
@@ -91,7 +92,7 @@ const App: React.FunctionComponent = () => {
   };
 
   const { isPanelOpen, panelContent, headerText, openSidePanel, closeSidePanel } = useSidePanel();
-  const { tabs, tabsManager } = useTabs();
+  const { tabs, activeTab, closeTab, tabsManager } = useTabs();
 
   const explorerParams: ExplorerParams = {
     setIsNotificationConsoleExpanded,
@@ -226,10 +227,7 @@ const App: React.FunctionComponent = () => {
               {tabs.length === 0 && <SplashScreen explorer={explorer} />}
             </form>
           </div>
-          <div
-            className="tabsManagerContainer"
-            data-bind='component: { name: "tabs-manager", params: {data: tabsManager} }'
-          />
+          {tabs.length > 0 && <Tabs tabs={tabs} activeTab={activeTab} closeTab={closeTab} />}
         </div>
         {/* Collections Tree and Tabs - End */}
         <div
