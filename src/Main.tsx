@@ -69,6 +69,7 @@ import { NotificationConsoleComponent } from "./Explorer/Menus/NotificationConso
 import { PanelContainerComponent } from "./Explorer/Panes/PanelContainerComponent";
 import { SplashScreen } from "./Explorer/SplashScreen/SplashScreen";
 import { Dialog, DialogProps } from "./Explorer/Controls/Dialog";
+import { useTabs } from "./hooks/useTabs";
 
 initializeIcons();
 
@@ -90,6 +91,7 @@ const App: React.FunctionComponent = () => {
   };
 
   const { isPanelOpen, panelContent, headerText, openSidePanel, closeSidePanel } = useSidePanel();
+  const { tabsManager } = useTabs();
 
   const explorerParams: ExplorerParams = {
     setIsNotificationConsoleExpanded,
@@ -99,7 +101,9 @@ const App: React.FunctionComponent = () => {
     closeSidePanel,
     openDialog,
     closeDialog,
+    tabsManager,
   };
+
   const config = useConfig();
   const explorer = useKnockoutExplorer(config?.platform, explorerParams);
 
