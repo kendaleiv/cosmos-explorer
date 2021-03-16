@@ -1481,47 +1481,30 @@ export default class Explorer {
       : this.selectedNode().collection) as ViewModels.Collection;
   }
 
-  // TODO: Refactor below methods, minimize dependencies and add unit tests where necessary
   public findSelectedStoredProcedure(): StoredProcedure {
-    const selectedCollection: ViewModels.Collection = this.findSelectedCollection();
-    return _.find(selectedCollection.storedProcedures(), (storedProcedure: StoredProcedure) => {
-      const openedSprocTab = this.tabsManager.getTabs(
-        ViewModels.CollectionTabKind.StoredProcedures,
-        (tab) => tab.node && tab.node.rid === storedProcedure.rid
-      );
-      return (
-        storedProcedure.rid === this.selectedNode().rid ||
-        (!!openedSprocTab && openedSprocTab.length > 0 && openedSprocTab[0].isActive())
-      );
-    });
+    return this.findSelected(
+      ViewModels.CollectionTabKind.StoredProcedures,
+      this.findSelectedCollection().storedProcedures()
+    );
   }
 
   public findSelectedUDF(): UserDefinedFunction {
-    const selectedCollection: ViewModels.Collection = this.findSelectedCollection();
-    return _.find(selectedCollection.userDefinedFunctions(), (userDefinedFunction: UserDefinedFunction) => {
-      const openedUdfTab = this.tabsManager.getTabs(
-        ViewModels.CollectionTabKind.UserDefinedFunctions,
-        (tab) => tab.node && tab.node.rid === userDefinedFunction.rid
-      );
-      return (
-        userDefinedFunction.rid === this.selectedNode().rid ||
-        (!!openedUdfTab && openedUdfTab.length > 0 && openedUdfTab[0].isActive())
-      );
-    });
+    return this.findSelected(
+      ViewModels.CollectionTabKind.UserDefinedFunctions,
+      this.findSelectedCollection().userDefinedFunctions()
+    );
   }
 
   public findSelectedTrigger(): Trigger {
-    const selectedCollection: ViewModels.Collection = this.findSelectedCollection();
-    return _.find(selectedCollection.triggers(), (trigger: Trigger) => {
-      const openedTriggerTab = this.tabsManager.getTabs(
-        ViewModels.CollectionTabKind.Triggers,
-        (tab) => tab.node && tab.node.rid === trigger.rid
-      );
-      return (
-        trigger.rid === this.selectedNode().rid ||
-        (!!openedTriggerTab && openedTriggerTab.length > 0 && openedTriggerTab[0].isActive())
-      );
-    });
+    return this.findSelected(ViewModels.CollectionTabKind.Triggers, this.findSelectedCollection().triggers());
+  }
+
+  private findSelected<T extends { rid: string }>(tabKind: ViewModels.CollectionTabKind, collection: T[]) {
+    const selectedRid = this.selectedNode()?.rid;
+    return collection.find(
+      ({ rid }) =>
+        rid === selectedRid || this.tabsManager.getTabs(tabKind, ({ node }) => node?.rid === rid)?.[0]?.isActive()
+    );
   }
 
   public closeAllPanes(): void {
